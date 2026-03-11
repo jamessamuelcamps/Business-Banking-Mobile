@@ -13,14 +13,14 @@ export default function HomeHeader() {
       <div style={{ 
         position: 'relative', 
         backgroundColor: colors.grey100, 
-        width: '48px', 
-        height: '48px', 
-        borderRadius: '50%', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center' 
+        width: '40px',
+        height: '40px',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
-        <Bell size={24} strokeWidth={1.5} style={{ color: colors.black }} />
+        <Bell size={20} strokeWidth={1.5} style={{ color: colors.black }} />
         <div style={{ 
           position: 'absolute', 
           top: '-4px', 
@@ -42,9 +42,9 @@ export default function HomeHeader() {
       <div style={{ 
         backgroundColor: colors.springgreen, 
         color: colors.black, 
-        fontSize: '18px', 
-        width: '48px', 
-        height: '48px', 
+        fontSize: '16px',
+        width: '40px',
+        height: '40px',
         borderRadius: '50%', 
         display: 'flex', 
         alignItems: 'center', 
