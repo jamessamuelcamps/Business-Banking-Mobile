@@ -9,13 +9,13 @@ export default function PromoCard() {
       padding: '24px 16px',
       backgroundImage: `url(${treeImage})`,
       backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      backgroundPosition: '150% center',
       backgroundRepeat: 'no-repeat',
       color: colors.brightwhite, 
       height: 'calc(100dvh - 610px)',
       borderRadius: '24px'
     }}>
-      <div style={{ display: 'flex', height: '100%', width:'40%' }}>
+      <div style={{ display: 'flex', height: '100%', width: '60%' }}>
         <div style={{ 
           flex: 1, 
           display: 'flex', 
