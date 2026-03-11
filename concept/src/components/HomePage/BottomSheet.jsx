@@ -13,7 +13,7 @@ export default function BottomSheet() {
   const [activeTab, setActiveTab] = useState('Accounts');
   const contentRef = useRef(null);
 
-  const COLLAPSED_HEIGHT = 342;
+  const COLLAPSED_HEIGHT = 350;
   const EXPANDED_HEIGHT = window.innerHeight;
 
   useEffect(() => {
@@ -164,7 +164,7 @@ export default function BottomSheet() {
         style={{ 
           flex: 1, 
           overflowY: isExpanded ? 'auto' : 'hidden', 
-          paddingBottom: '96px'
+          paddingBottom: '104px'
         }} 
         className="scrollbar-hide"
       >
