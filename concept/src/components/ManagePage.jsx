@@ -34,10 +34,10 @@ export default function ManagePage({ openModal }) {  // ADD openModal prop here
       width: '390px',
       maxWidth: '390px', 
       margin: '0 auto', 
-      height: '844px', 
-      fontFamily: "'Manrope', sans-serif", 
-      backgroundColor: colors.white, 
-      position: 'relative', 
+      height: '100%',
+      fontFamily: "'Manrope', sans-serif",
+      backgroundColor: colors.white,
+      position: 'relative',
       overflow: 'hidden'
     }}>
       <StatusBar />

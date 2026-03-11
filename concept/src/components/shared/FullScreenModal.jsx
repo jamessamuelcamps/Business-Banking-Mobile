@@ -66,7 +66,7 @@ const FullScreenModal = ({
           left: '50%',
           transform: `translateX(-50%) translateY(${translateY}px)`,
           width: '390px',
-          height: 'calc(100vh - 44px)',
+          height: 'calc(100dvh - 44px)',
           backgroundColor: backgroundColor,
           transition: 'transform 300ms cubic-bezier(0.4, 0.0, 0.2, 1)',
           zIndex: 101,

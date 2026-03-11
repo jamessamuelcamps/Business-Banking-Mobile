@@ -60,7 +60,7 @@ const App = () => {
       <div style={{ 
         maxWidth: '390px', 
         margin: '0 auto', 
-        height: '844px', 
+        height: '100dvh',
         fontFamily: "'Manrope', sans-serif", 
         backgroundColor: '#F9FAFA', 
         position: 'relative', 

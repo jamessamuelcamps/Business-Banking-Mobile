@@ -268,7 +268,7 @@ const IOSStackModal = ({
               transform: `translateX(-50%) translateY(${translateYValue}px) scale(${scale})`,
               transformOrigin: 'top center',
               width: '390px',
-              height: `calc(100vh - ${44 + stackOffset}px)`,
+              height: `calc(100dvh - ${44 + stackOffset}px)`,
               backgroundColor: colors.white,
               transition: isDragging && isTop ? 'none' : 'transform 300ms cubic-bezier(0.4, 0.0, 0.2, 1), opacity 300ms ease',
               zIndex: 101 + index,

@@ -97,7 +97,7 @@ export default function BalanceModal({
       left: '50%',
       transform: 'translateX(-50%)',
       width: '390px',
-      height: '844px',
+      height: '100dvh',
       pointerEvents: 'none',
       zIndex: 100
     }}>

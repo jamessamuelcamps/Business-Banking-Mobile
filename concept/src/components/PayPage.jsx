@@ -112,7 +112,7 @@ export default function PayPage({ onClose }) {
       width: '390px',
       maxWidth: '390px',
       margin: '0 auto',
-      height: '844px',
+      height: '100%',
       fontFamily: "'Manrope', sans-serif",
       backgroundColor: colors.white,
       position: 'relative',
