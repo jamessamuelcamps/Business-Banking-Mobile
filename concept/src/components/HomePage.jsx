@@ -27,9 +27,7 @@ export default function HomePage() {
 
   return (
     <div style={{ 
-      width: '390px',
-      maxWidth: '390px', 
-      margin: '0 auto', 
+      width: '100%',
       height: '100%',
       fontFamily: "'Manrope', sans-serif",
       backgroundColor: colors.white,

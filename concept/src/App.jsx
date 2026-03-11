@@ -58,8 +58,7 @@ const App = () => {
     <>
       {/* Main App Container */}
       <div style={{ 
-        maxWidth: '390px', 
-        margin: '0 auto', 
+        width: '100%',
         height: '100dvh',
         fontFamily: "'Manrope', sans-serif", 
         backgroundColor: '#F9FAFA', 

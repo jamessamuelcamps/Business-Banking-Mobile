@@ -14,7 +14,7 @@ export default function BottomSheet() {
   const contentRef = useRef(null);
 
   const COLLAPSED_HEIGHT = 375;
-  const EXPANDED_HEIGHT = window.innerHeight - 100;
+  const EXPANDED_HEIGHT = window.innerHeight;
 
   useEffect(() => {
     if (activeTab === 'Cashflow') {
