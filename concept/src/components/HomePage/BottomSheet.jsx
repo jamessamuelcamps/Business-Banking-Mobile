@@ -14,14 +14,14 @@ export default function BottomSheet() {
   const contentRef = useRef(null);
 
   const COLLAPSED_HEIGHT = 375;
-  const EXPANDED_HEIGHT = 800;
+  const EXPANDED_HEIGHT = window.innerHeight - 100;
 
   useEffect(() => {
     if (activeTab === 'Cashflow') {
-      setSheetHeight(554);
+      setSheetHeight(Math.min(554, EXPANDED_HEIGHT));
     } else if (activeTab === 'Invoices') {
-      setSheetHeight(375);
-    } else if (sheetHeight === 554 || sheetHeight === 375) {
+      setSheetHeight(COLLAPSED_HEIGHT);
+    } else if (sheetHeight <= 554) {
       setSheetHeight(COLLAPSED_HEIGHT);
     }
   }, [activeTab]);
