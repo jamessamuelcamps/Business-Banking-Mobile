@@ -1,0 +1,18 @@
+export const colors = {
+  white: '#F9FAFA',
+  brightwhite: '#FFFFFF',
+  whitesmoke: '#EFF0EE',
+  black: '#1F2020',
+  pitchblack: '#000000',
+  springgreen: '#5BFF9A',
+  clearblue: '#3280F6',
+  lightred: '#CE000A',
+  aquamarine: '#2ADAA5',
+  midnightgreen: '#0C3637',
+  grey100: '#F4F5F5',
+  grey200: '#ECEDED',
+  grey300: '#DEDFDF',
+  grey500: '#9C9D9D',
+  grey600: '#737474',
+  textSecondary: '#5B5976',
+};

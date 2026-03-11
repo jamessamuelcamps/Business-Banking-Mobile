@@ -1,0 +1,165 @@
+import { ChevronRight } from 'lucide-react';
+import { colors } from '../../styles/colors';
+import { CardIcon } from '../shared/SvgIcons';
+
+function ListItem({ icon, name, subtitle, trailing }) {
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '12px 16px',
+      backgroundColor: colors.brightwhite,
+      cursor: 'pointer',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+        <div style={{ flexShrink: 0 }}>
+          {icon}
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{
+            fontSize: '16px',
+            color: colors.black,
+            fontWeight: 500,
+            marginBottom: '2px',
+          }}>
+            {name}
+          </div>
+          <div style={{
+            fontSize: '14px',
+            color: colors.textSecondary,
+            fontWeight: 400,
+          }}>
+            {subtitle}
+          </div>
+        </div>
+        {trailing || <ChevronRight size={20} style={{ color: colors.black }} />}
+      </div>
+    </div>
+  );
+}
+
+function InitialsAvatar({ initials }) {
+  return (
+    <div style={{
+      backgroundColor: colors.springgreen,
+      width: '40px',
+      height: '40px',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: '14px',
+      fontWeight: 600,
+      color: colors.black,
+    }}>
+      {initials}
+    </div>
+  );
+}
+
+function IconContainer({ children }) {
+  return (
+    <div style={{
+      width: '40px',
+      height: '40px',
+      borderRadius: '8px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+      {children}
+    </div>
+  );
+}
+
+export default function ApprovalsTab() {
+  return (
+    <div>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        marginBottom: '16px'
+      }}>
+        <h2 style={{ fontSize: '14px', color: colors.black, fontWeight: 600 }}>
+          Invitations
+        </h2>
+        
+      </div>
+
+      <ListItem
+        icon={<InitialsAvatar initials="AK" />}
+        name="Andrei Kolosivsky"
+        subtitle="Admin • COMPANY NAME LTD +1"
+      />
+      <ListItem
+        icon={<InitialsAvatar initials="VC" />}
+        name="Veronica Campbell"
+        subtitle="User • COMPANY NAME LTD"
+      />
+
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        marginTop: '24px',
+        marginBottom: '16px'
+      }}>
+        <h2 style={{ fontSize: '14px', color: colors.black, fontWeight: 600 }}>
+          Card management
+        </h2>
+        
+      </div>
+
+      <ListItem
+        icon={<IconContainer><CardIcon size={32} /></IconContainer>}
+        name="Card limit increase"
+        subtitle="Alex Turner • £10,000"
+      />
+      <ListItem
+        icon={<IconContainer><CardIcon size={32} /></IconContainer>}
+        name="Unblock card"
+        subtitle="Joanna Ashford"
+      />
+
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        marginTop: '24px',
+        marginBottom: '16px'
+      }}>
+        <h2 style={{ fontSize: '14px', color: colors.black, fontWeight: 600 }}>
+          Payments
+        </h2>
+       
+      </div>
+
+      <ListItem
+        icon={
+          <IconContainer>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 -960 960 960"><path d="m105-565 149-268q5-8 11.52-11.5 6.53-3.5 14.5-3.5 7.98 0 14.48 3.5T306-833l149 268q5 7.69 4.5 15.38-.5 7.7-4.5 14.62-3.82 6.75-10.71 10.87Q437.41-520 429-520H131q-8.46 0-15.38-4.17-6.93-4.17-10.77-11-3.85-6.83-4.35-14.5-.5-7.66 4.5-15.33Zm176 445q-66 0-113-47t-47-113q0-67 47-113.5T281-440q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-60q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Zm-99-400h196l-98-176-98 176Zm338 430v-260q0-12.75 8.63-21.38Q537.25-440 550-440h260q12.75 0 21.38 8.62Q840-422.75 840-410v260q0 12.75-8.62 21.37Q822.75-120 810-120H550q-12.75 0-21.37-8.63Q520-137.25 520-150Zm60-30h200v-200H580v200Zm81-356-60-51q-69-58-95-91.5T480-753q0-45 31.5-76t78.5-31q26 0 50 12t40 35q16-23 40-35t50-12q47 0 78.5 31t31.5 76q0 41-26 74.5T759-587l-60 51q-8.05 7-19.02 7-10.98 0-18.98-7Zm19-63q85-70 112.5-100t27.5-52q0-21.97-12.86-35.48Q794.29-800 772-800q-13.1 0-25.55 7Q734-786 715-769l-35 33-35-33q-18.67-17.36-31.33-24.18Q601-800 588-800q-22.29 0-35.14 13.52Q540-772.97 540-751q0 22 27.5 52T680-599Zm0-101Zm-400 32Zm1 388Zm399 0Z"/></svg>
+          </IconContainer>
+        }
+        name="Supplier Name Ltd"
+        subtitle="Brian Murphy • £542.69"
+      />
+      <ListItem
+        icon={
+          <IconContainer>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 -960 960 960"><path d="m105-565 149-268q5-8 11.52-11.5 6.53-3.5 14.5-3.5 7.98 0 14.48 3.5T306-833l149 268q5 7.69 4.5 15.38-.5 7.7-4.5 14.62-3.82 6.75-10.71 10.87Q437.41-520 429-520H131q-8.46 0-15.38-4.17-6.93-4.17-10.77-11-3.85-6.83-4.35-14.5-.5-7.66 4.5-15.33Zm176 445q-66 0-113-47t-47-113q0-67 47-113.5T281-440q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-60q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Zm-99-400h196l-98-176-98 176Zm338 430v-260q0-12.75 8.63-21.38Q537.25-440 550-440h260q12.75 0 21.38 8.62Q840-422.75 840-410v260q0 12.75-8.62 21.37Q822.75-120 810-120H550q-12.75 0-21.37-8.63Q520-137.25 520-150Zm60-30h200v-200H580v200Zm81-356-60-51q-69-58-95-91.5T480-753q0-45 31.5-76t78.5-31q26 0 50 12t40 35q16-23 40-35t50-12q47 0 78.5 31t31.5 76q0 41-26 74.5T759-587l-60 51q-8.05 7-19.02 7-10.98 0-18.98-7Zm19-63q85-70 112.5-100t27.5-52q0-21.97-12.86-35.48Q794.29-800 772-800q-13.1 0-25.55 7Q734-786 715-769l-35 33-35-33q-18.67-17.36-31.33-24.18Q601-800 588-800q-22.29 0-35.14 13.52Q540-772.97 540-751q0 22 27.5 52T680-599Zm0-101Zm-400 32Zm1 388Zm399 0Z"/></svg>
+          </IconContainer>
+        }
+        name="Staples"
+        subtitle="Alex Turner • £99.99"
+      />
+    </div>
+  );
+}
