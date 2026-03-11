@@ -18,8 +18,8 @@ export default function NavBar({ activeItem, onNavigate }) {
       backgroundColor: colors.brightwhite, 
       borderTop: `1px solid ${colors.grey200}`, 
       zIndex: 50, 
-      paddingTop: '16px', 
-      paddingBottom: '40px' 
+      paddingTop: '16px',
+      paddingBottom: '16px'
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
         {navItems.map(item => (
@@ -44,16 +44,6 @@ export default function NavBar({ activeItem, onNavigate }) {
           </button>
         ))}
       </div>
-      <div style={{ 
-        position: 'absolute', 
-        bottom: '16px', 
-        left: '50%', 
-        transform: 'translateX(-50%)', 
-        backgroundColor: colors.pitchblack, 
-        width: '128px', 
-        height: '4px', 
-        borderRadius: '50px' 
-      }} />
     </div>
   );
 }
