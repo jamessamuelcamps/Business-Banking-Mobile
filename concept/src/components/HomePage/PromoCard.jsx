@@ -12,7 +12,7 @@ export default function PromoCard() {
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
       color: colors.brightwhite, 
-      height: '180px',
+      height: 'calc(100dvh - 610px)',
       borderRadius: '24px'
     }}>
       <div style={{ display: 'flex', height: '100%', width:'40%' }}>
