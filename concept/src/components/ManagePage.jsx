@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { colors } from '../styles/colors';
-import StatusBar from './shared/StatusBar';
 import ManageHeader from './ManagePage/ManageHeader';
 import ManageSubTabs from './ManagePage/ManageSubTabs';
 import CompaniesContent from './ManagePage/CompaniesContent';
@@ -40,9 +39,7 @@ export default function ManagePage({ openModal }) {  // ADD openModal prop here
       position: 'relative',
       overflow: 'hidden'
     }}>
-      <StatusBar />
-
-      <div style={{ paddingTop: '44px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         {/* Header Section */}
         <div style={{
           backgroundColor: colors.white,

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { colors } from '../styles/colors';
-import StatusBar from './shared/StatusBar';
 import HomeHeader from './HomePage/HomeHeader';
 import BalanceSection from './HomePage/BalanceSection';
 import PromoCard from './HomePage/PromoCard';
@@ -37,9 +36,7 @@ export default function HomePage() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      <StatusBar />
-      
-      <div style={{ paddingTop: '44px', height: '100%' }}>
+      <div style={{ height: '100%' }}>
         <HomeHeader />
         <BalanceSection 
           totalBalance={totalBalance}

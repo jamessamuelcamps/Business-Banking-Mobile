@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { colors } from '../styles/colors';
-import StatusBar from './shared/StatusBar';
 import RecipientsScreen from './PayPage/RecipientsScreen';
 import SearchModal from './PayPage/SearchModal';
 import EnterAmountScreen from './PayPage/EnterAmountScreen';
@@ -118,9 +117,7 @@ export default function PayPage({ onClose }) {
       position: 'relative',
       overflow: 'hidden',
     }}>
-      <StatusBar />
-
-      <div style={{ paddingTop: '44px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         {renderScreen()}
       </div>
 

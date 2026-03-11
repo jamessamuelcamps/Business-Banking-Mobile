@@ -1,5 +1,4 @@
 import { colors } from '../styles/colors';
-import StatusBar from './shared/StatusBar';
 import NavBar from './shared/NavBar';
 
 const approvals = [
@@ -65,13 +64,10 @@ export default function PaymentsPage({ onNavigate, onStartPayment }) {
       position: 'relative',
       overflow: 'hidden',
     }}>
-      <StatusBar />
-
       {/* Scrollable body */}
       <div
         className="scrollbar-hide"
         style={{
-          paddingTop: '44px',
           height: '100%',
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
