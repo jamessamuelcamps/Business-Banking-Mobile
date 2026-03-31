@@ -5,8 +5,12 @@ import StatusBar from './components/shell/StatusBar';
 import BottomNav from './components/layout/BottomNav';
 import HomePage from './components/home/HomePage';
 import PaymentsPage from './components/pages/PaymentsPage';
-import CardPage from './components/pages/CardPage';
+import ApplyPage from './components/pages/ApplyPage';
 import HelpPage from './components/pages/HelpPage';
+import ManagePage from './components/pages/ManagePage';
+import AccountDetailPage from './components/pages/AccountDetailPage';
+import MemberDetailPage from './components/pages/MemberDetailPage';
+import CardDetailPage from './components/pages/CardDetailPage';
 import SplashScreen from './components/onboarding/SplashScreen';
 
 const PAGE_ORDER = ['home', 'apply', 'pay', 'manage', 'invoice'];
@@ -25,6 +29,11 @@ export default function App() {
   const [stage, setStage] = useState('splash'); // 'splash' | 'app'
   const [currentPage, setCurrentPage] = useState('home');
   const [prevPage, setPrevPage] = useState('home');
+  const [detail, setDetail] = useState(null); // null | 'account' | 'member' | 'card'
+
+  // Home page setup guide state — lifted here so it survives navigation
+  const [firstCardComplete, setFirstCardComplete] = useState(false);
+  const [cardOrder, setCardOrder] = useState([0, 1, 2, 3, 4]);
 
   const handleNavigate = (page) => {
     if (page === currentPage) return;
@@ -36,10 +45,10 @@ export default function App() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'home':    return <HomePage />;
-      case 'apply':   return <CardPage />;
+      case 'home':    return <HomePage firstCardComplete={firstCardComplete} setFirstCardComplete={setFirstCardComplete} cardOrder={cardOrder} setCardOrder={setCardOrder} />;
+      case 'apply':   return <ApplyPage />;
       case 'pay':     return <PaymentsPage />;
-      case 'manage':  return <HelpPage />;
+      case 'manage':  return <ManagePage onOpenDetail={setDetail} />;
       case 'invoice': return <HelpPage />;
       default:        return null;
     }
@@ -57,7 +66,7 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
+            style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}
           >
             {/* Page area */}
             <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
@@ -88,6 +97,24 @@ export default function App() {
             </div>
 
             <BottomNav currentPage={currentPage} onNavigate={handleNavigate} />
+
+            {/* Detail overlay — covers page + nav */}
+            <AnimatePresence>
+              {detail && (
+                <motion.div
+                  key={detail}
+                  initial={{ x: 393 }}
+                  animate={{ x: 0 }}
+                  exit={{ x: 393 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 35, mass: 0.8 }}
+                  style={{ position: 'absolute', inset: 0, zIndex: 10, display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff' }}
+                >
+                  {detail === 'account' && <AccountDetailPage onBack={() => setDetail(null)} />}
+                  {detail === 'member'  && <MemberDetailPage  onBack={() => setDetail(null)} />}
+                  {detail === 'card'    && <CardDetailPage    onBack={() => setDetail(null)} />}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
