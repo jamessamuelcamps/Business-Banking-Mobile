@@ -1,4 +1,4 @@
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, Check } from 'lucide-react';
 import iconChevronDown from '../../assets/icon-chevron-down.svg';
 import iconQuestion from '../../assets/icon-question.svg';
 import iconUserCog from '../../assets/icon-user-cog.svg';
@@ -161,21 +161,102 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
             </p>
           </div>
 
-          {/* Step 1 — active */}
+          {/* Step 1 */}
           <div style={{ padding: '16px 16px 8px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-            <StepAvatar number={1} active />
+            {timeAdvanced ? (
+              <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Check size={20} color="#007a47" strokeWidth={2.5} />
+              </div>
+            ) : (
+              <StepAvatar number={1} active />
+            )}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8, paddingTop: 2 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {timeAdvanced ? (
                 <p style={{
                   margin: 0,
                   fontFamily: tokens.typography.fontFamily,
                   fontSize: `${tokens.typography.fontSize.sm}px`,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   lineHeight: '20px',
-                  color: tokens.color.text.primary,
+                  color: '#007a47',
                 }}>
                   Fund your Spend account
                 </p>
+              ) : (
+                <>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <p style={{
+                      margin: 0,
+                      fontFamily: tokens.typography.fontFamily,
+                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      fontWeight: tokens.typography.fontWeight.semibold,
+                      lineHeight: '20px',
+                      color: tokens.color.text.primary,
+                    }}>
+                      Fund your Spend account
+                    </p>
+                    <p style={{
+                      margin: 0,
+                      fontFamily: tokens.typography.fontFamily,
+                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      fontWeight: tokens.typography.fontWeight.regular,
+                      lineHeight: '20px',
+                      color: tokens.color.text.primary,
+                    }}>
+                      Make a bank transfer from your existing bank using these details:
+                    </p>
+                  </div>
+                  <div style={{
+                    alignSelf: 'flex-start',
+                    backgroundColor: tokens.color.background.surface,
+                    borderRadius: tokens.borderRadius.sm,
+                    padding: '4px 8px',
+                  }}>
+                    <p style={{
+                      margin: 0,
+                      fontFamily: tokens.typography.fontFamily,
+                      fontSize: `${tokens.typography.fontSize.sm}px`,
+                      fontWeight: tokens.typography.fontWeight.semibold,
+                      lineHeight: '20px',
+                      color: tokens.color.text.primary,
+                      whiteSpace: 'nowrap',
+                    }}>
+                      10-30-30 • 12335299
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Step 2 */}
+          <div style={{ padding: '8px 16px 16px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+            <StepAvatar number={2} active={timeAdvanced} />
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, paddingTop: 2 }}>
+              <p style={{
+                margin: 0,
+                fontFamily: tokens.typography.fontFamily,
+                fontSize: `${tokens.typography.fontSize.sm}px`,
+                fontWeight: tokens.typography.fontWeight.semibold,
+                lineHeight: '20px',
+                color: timeAdvanced ? tokens.color.text.primary : tokens.color.border.default,
+              }}>
+                Transfer funds to your savings account
+              </p>
+              {!timeAdvanced && (
+                <p style={{
+                  margin: 0,
+                  fontFamily: tokens.typography.fontFamily,
+                  fontSize: `${tokens.typography.fontSize.sm}px`,
+                  fontWeight: tokens.typography.fontWeight.regular,
+                  lineHeight: '20px',
+                  color: tokens.color.border.default,
+                }}>
+                  Once Spend is funded, transfer across to start earning{' '}
+                  <span style={{ fontWeight: tokens.typography.fontWeight.semibold }}>4.5% AER.</span>
+                </p>
+              )}
+              {timeAdvanced && (
                 <p style={{
                   margin: 0,
                   fontFamily: tokens.typography.fontFamily,
@@ -184,55 +265,10 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
                   lineHeight: '20px',
                   color: tokens.color.text.primary,
                 }}>
-                  Make a bank transfer from your existing bank using these details:
+                  Once Spend is funded, transfer across to start earning{' '}
+                  <span style={{ fontWeight: tokens.typography.fontWeight.semibold }}>4.5% AER.</span>
                 </p>
-              </div>
-              <div style={{
-                alignSelf: 'flex-start',
-                backgroundColor: tokens.color.background.surface,
-                borderRadius: tokens.borderRadius.sm,
-                padding: '4px 8px',
-              }}>
-                <p style={{
-                  margin: 0,
-                  fontFamily: tokens.typography.fontFamily,
-                  fontSize: `${tokens.typography.fontSize.sm}px`,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  lineHeight: '20px',
-                  color: tokens.color.text.primary,
-                  whiteSpace: 'nowrap',
-                }}>
-                  10-30-30 • 12335299
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Step 2 — dimmed */}
-          <div style={{ padding: '8px 16px 16px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-            <StepAvatar number={2} active={false} />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, paddingTop: 2 }}>
-              <p style={{
-                margin: 0,
-                fontFamily: tokens.typography.fontFamily,
-                fontSize: `${tokens.typography.fontSize.sm}px`,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                lineHeight: '20px',
-                color: tokens.color.border.default,
-              }}>
-                Transfer funds to your savings account
-              </p>
-              <p style={{
-                margin: 0,
-                fontFamily: tokens.typography.fontFamily,
-                fontSize: `${tokens.typography.fontSize.sm}px`,
-                fontWeight: tokens.typography.fontWeight.regular,
-                lineHeight: '20px',
-                color: tokens.color.border.default,
-              }}>
-                Once Spend is funded, transfer across to start earning{' '}
-                <span style={{ fontWeight: tokens.typography.fontWeight.semibold }}>4.5% AER.</span>
-              </p>
+              )}
             </div>
           </div>
         </div>
@@ -269,21 +305,40 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
               {balance}
             </p>
           </div>
-          <button style={{
-            width: '100%',
-            padding: '12px 16px',
-            borderRadius: `${tokens.borderRadius.pill}px`,
-            backgroundColor: tokens.color.brand.base,
-            border: 'none',
-            cursor: 'pointer',
-            fontFamily: tokens.typography.fontFamily,
-            fontSize: `${tokens.typography.fontSize.default}px`,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.color.text.primary,
-            lineHeight: '24px',
-          }}>
-            Add money
-          </button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button style={{
+              flex: 1,
+              padding: '12px 16px',
+              borderRadius: `${tokens.borderRadius.pill}px`,
+              backgroundColor: tokens.color.brand.base,
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: tokens.typography.fontFamily,
+              fontSize: `${tokens.typography.fontSize.default}px`,
+              fontWeight: tokens.typography.fontWeight.semibold,
+              color: tokens.color.text.primary,
+              lineHeight: '24px',
+            }}>
+              Add money
+            </button>
+            {timeAdvanced && (
+              <button style={{
+                flex: 1,
+                padding: '12px 16px',
+                borderRadius: `${tokens.borderRadius.pill}px`,
+                backgroundColor: tokens.color.background.surface,
+                border: 'none',
+                cursor: 'pointer',
+                fontFamily: tokens.typography.fontFamily,
+                fontSize: `${tokens.typography.fontSize.default}px`,
+                fontWeight: tokens.typography.fontWeight.semibold,
+                color: tokens.color.text.primary,
+                lineHeight: '24px',
+              }}>
+                Transfer
+              </button>
+            )}
+          </div>
         </div>
 
         {/* FSCS banner */}
