@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp, Check } from 'lucide-react';
 import iconChevronDown from '../../assets/icon-chevron-down.svg';
 import iconQuestion from '../../assets/icon-question.svg';
@@ -49,11 +51,52 @@ const iconButton = (icon, alt = '') => (
   </div>
 );
 
-export default function HomePage({ savingsChoice, timeAdvanced }) {
-  const balance = timeAdvanced ? '£50,000.00' : '£0.00';
+const fmtAmt = (n) => `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+export default function HomePage({ savingsChoice, timeAdvanced, transferStarted, transferComplete, setupDismissed, onSetupDismiss, onTransfer }) {
+  const [displayAmount, setDisplayAmount] = useState(0);
+  const [spendDisplayAmount, setSpendDisplayAmount] = useState(0);
+  const [savingsDisplayAmount, setSavingsDisplayAmount] = useState(0);
+  useEffect(() => {
+    if (!transferComplete) return;
+    const duration = 1400;
+    const start = performance.now();
+    let rafId;
+    const tick = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setSpendDisplayAmount(Math.round(50000 * (1 - eased)));
+      setSavingsDisplayAmount(Math.round(50000 * eased));
+      if (progress < 1) rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [transferComplete]);
+
+  useEffect(() => {
+    if (!timeAdvanced) { setDisplayAmount(0); return; }
+    const target = 50000;
+    const duration = 1400;
+    const start = performance.now();
+    let rafId;
+    const tick = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplayAmount(Math.round(target * eased));
+      if (progress < 1) rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [timeAdvanced]);
+
+  const balance = `£${displayAmount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const baseAccounts = [
+    { ...BASE_ACCOUNTS[0], balance: transferComplete ? fmtAmt(spendDisplayAmount) : balance },
+    BASE_ACCOUNTS[1],
+  ];
   const ACCOUNTS = savingsChoice
-    ? [...BASE_ACCOUNTS, { circleBg: '#E3F8EB', icon: accountSavings, name: savingsChoice.name, account: savingsChoice.rate, balance: '£0.00' }]
-    : BASE_ACCOUNTS;
+    ? [...baseAccounts, { circleBg: '#E3F8EB', icon: accountSavings, name: savingsChoice.name, account: savingsChoice.rate, balance: transferComplete ? fmtAmt(savingsDisplayAmount) : '£0.00' }]
+    : baseAccounts;
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', backgroundColor: '#ffffff' }}>
 
@@ -91,62 +134,121 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
       {/* Scrollable content */}
       <div className="scrollbar-hide" style={{ flex: 1, overflowY: 'auto', padding: '0 16px 32px', display: 'flex', flexDirection: 'column', gap: 24 }}>
 
-        {/* Urgency card — shown after 7 days when funds are sitting in Spend */}
-        {timeAdvanced && savingsChoice && (
-          <div style={{
-            backgroundColor: '#FFFBEB',
-            border: '1px solid #FCD34D',
-            borderRadius: 16,
-            padding: 16,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 12,
-          }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <p style={{
-                margin: 0,
-                fontFamily: tokens.typography.fontFamily,
-                fontSize: `${tokens.typography.fontSize.default}px`,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                lineHeight: '24px',
-                color: tokens.color.text.primary,
-              }}>
-                Your £50,000 has been in Spend for 7 days
-              </p>
-              <p style={{
-                margin: 0,
-                fontFamily: tokens.typography.fontFamily,
-                fontSize: `${tokens.typography.fontSize.sm}px`,
-                fontWeight: tokens.typography.fontWeight.regular,
-                lineHeight: '20px',
-                color: tokens.color.text.primary,
-              }}>
-                It's earning 0% sitting there. Transfer to your {savingsChoice.name} to start earning {savingsChoice.rate}.
-              </p>
-            </div>
-            <button style={{
-              alignSelf: 'flex-start',
-              padding: '8px 16px',
-              borderRadius: `${tokens.borderRadius.pill}px`,
-              backgroundColor: tokens.color.text.primary,
-              border: 'none',
-              cursor: 'pointer',
-              fontFamily: tokens.typography.fontFamily,
-              fontSize: `${tokens.typography.fontSize.sm}px`,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              color: '#ffffff',
-              lineHeight: '20px',
-            }}>
-              Transfer funds
-            </button>
-          </div>
-        )}
+        {/* Alert card */}
+        <AnimatePresence>
+          {timeAdvanced && savingsChoice && !setupDismissed && (
+            <motion.div key="alert-card" exit={{ opacity: 0 }} transition={{ duration: 0.6 }}>
+              <AnimatePresence mode="wait" initial={false}>
+                {transferComplete ? (
+                  <motion.div key="green-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+                    <div style={{
+                      backgroundColor: '#E3F8EB',
+                      border: `1px solid ${tokens.color.brand.mint}`,
+                      borderRadius: 16, padding: 16,
+                      display: 'flex', flexDirection: 'column', gap: 12,
+                    }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        <p style={{
+                          margin: 0,
+                          fontFamily: tokens.typography.fontFamily,
+                          fontSize: `${tokens.typography.fontSize.default}px`,
+                          fontWeight: tokens.typography.fontWeight.semibold,
+                          lineHeight: '24px',
+                          color: tokens.color.text.primary,
+                        }}>
+                          £50,000 is now in your {savingsChoice.name}
+                        </p>
+                        <p style={{
+                          margin: 0,
+                          fontFamily: tokens.typography.fontFamily,
+                          fontSize: `${tokens.typography.fontSize.sm}px`,
+                          fontWeight: tokens.typography.fontWeight.regular,
+                          lineHeight: '20px',
+                          color: tokens.color.text.primary,
+                        }}>
+                          You're earning {savingsChoice.rate}
+                        </p>
+                      </div>
+                      <button
+                        onClick={onSetupDismiss}
+                        style={{
+                          alignSelf: 'flex-start',
+                          padding: '8px 16px',
+                          borderRadius: `${tokens.borderRadius.pill}px`,
+                          backgroundColor: tokens.color.text.primary,
+                          border: 'none', cursor: 'pointer',
+                          fontFamily: tokens.typography.fontFamily,
+                          fontSize: `${tokens.typography.fontSize.sm}px`,
+                          fontWeight: tokens.typography.fontWeight.semibold,
+                          color: '#ffffff',
+                          lineHeight: '20px',
+                        }}>
+                        OK, got it
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div key="yellow-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+                    <div style={{
+                      backgroundColor: '#FFFBEB',
+                      border: '1px solid #FCD34D',
+                      borderRadius: 16, padding: 16,
+                      display: 'flex', flexDirection: 'column', gap: 12,
+                    }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        <p style={{
+                          margin: 0,
+                          fontFamily: tokens.typography.fontFamily,
+                          fontSize: `${tokens.typography.fontSize.default}px`,
+                          fontWeight: tokens.typography.fontWeight.semibold,
+                          lineHeight: '24px',
+                          color: tokens.color.text.primary,
+                        }}>
+                          Your £50,000 has been in Spend for 7 days
+                        </p>
+                        <p style={{
+                          margin: 0,
+                          fontFamily: tokens.typography.fontFamily,
+                          fontSize: `${tokens.typography.fontSize.sm}px`,
+                          fontWeight: tokens.typography.fontWeight.regular,
+                          lineHeight: '20px',
+                          color: tokens.color.text.primary,
+                        }}>
+                          It's earning 0% sitting there. Transfer to your {savingsChoice.name} to start earning {savingsChoice.rate}.
+                        </p>
+                      </div>
+                      <button
+                        onClick={onTransfer}
+                        style={{
+                          alignSelf: 'flex-start',
+                          padding: '8px 16px',
+                          borderRadius: `${tokens.borderRadius.pill}px`,
+                          backgroundColor: '#FCD34D',
+                          border: 'none', cursor: 'pointer',
+                          fontFamily: tokens.typography.fontFamily,
+                          fontSize: `${tokens.typography.fontSize.sm}px`,
+                          fontWeight: tokens.typography.fontWeight.semibold,
+                          color: tokens.color.text.primary,
+                          lineHeight: '20px',
+                        }}>
+                        Transfer funds
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Next actions card */}
-        <div style={{
-          border: `1px solid ${tokens.color.border.default}`,
-          borderRadius: 24,
-        }}>
+        {/* Steps card */}
+        <AnimatePresence>
+          {!transferStarted && (
+            <motion.div key="steps-card" exit={{ opacity: 0 }} transition={{ duration: 0.7 }}>
+              <div style={{
+                border: `1px solid ${tokens.color.border.default}`,
+                borderRadius: 24,
+              }}>
           {/* Card header */}
           <div style={{ padding: '16px 16px 8px' }}>
             <p style={{
@@ -195,16 +297,6 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
                     }}>
                       Fund your Spend account
                     </p>
-                    <p style={{
-                      margin: 0,
-                      fontFamily: tokens.typography.fontFamily,
-                      fontSize: `${tokens.typography.fontSize.sm}px`,
-                      fontWeight: tokens.typography.fontWeight.regular,
-                      lineHeight: '20px',
-                      color: tokens.color.text.primary,
-                    }}>
-                      Make a bank transfer from your existing bank using these details:
-                    </p>
                   </div>
                   <div style={{
                     alignSelf: 'flex-start',
@@ -231,7 +323,13 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
 
           {/* Step 2 */}
           <div style={{ padding: '8px 16px 16px', display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-            <StepAvatar number={2} active={timeAdvanced} />
+            {transferComplete ? (
+              <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Check size={20} color="#007a47" strokeWidth={2.5} />
+              </div>
+            ) : (
+              <StepAvatar number={2} active={timeAdvanced} />
+            )}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, paddingTop: 2 }}>
               <p style={{
                 margin: 0,
@@ -239,11 +337,11 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
                 fontSize: `${tokens.typography.fontSize.sm}px`,
                 fontWeight: tokens.typography.fontWeight.semibold,
                 lineHeight: '20px',
-                color: timeAdvanced ? tokens.color.text.primary : tokens.color.border.default,
+                color: transferComplete ? '#007a47' : timeAdvanced ? tokens.color.text.primary : tokens.color.border.default,
               }}>
                 Transfer funds to your savings account
               </p>
-              {!timeAdvanced && (
+              {!transferComplete && !timeAdvanced && (
                 <p style={{
                   margin: 0,
                   fontFamily: tokens.typography.fontFamily,
@@ -256,7 +354,7 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
                   <span style={{ fontWeight: tokens.typography.fontWeight.semibold }}>4.5% AER.</span>
                 </p>
               )}
-              {timeAdvanced && (
+              {!transferComplete && timeAdvanced && (
                 <p style={{
                   margin: 0,
                   fontFamily: tokens.typography.fontFamily,
@@ -271,7 +369,10 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
               )}
             </div>
           </div>
-        </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Balance card */}
         <div style={{
@@ -322,19 +423,21 @@ export default function HomePage({ savingsChoice, timeAdvanced }) {
               Add money
             </button>
             {timeAdvanced && (
-              <button style={{
-                flex: 1,
-                padding: '12px 16px',
-                borderRadius: `${tokens.borderRadius.pill}px`,
-                backgroundColor: tokens.color.background.surface,
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: tokens.typography.fontFamily,
-                fontSize: `${tokens.typography.fontSize.default}px`,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.color.text.primary,
-                lineHeight: '24px',
-              }}>
+              <button
+                onClick={onTransfer}
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  borderRadius: `${tokens.borderRadius.pill}px`,
+                  backgroundColor: tokens.color.background.surface,
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontFamily: tokens.typography.fontFamily,
+                  fontSize: `${tokens.typography.fontSize.default}px`,
+                  fontWeight: tokens.typography.fontWeight.semibold,
+                  color: tokens.color.text.primary,
+                  lineHeight: '24px',
+                }}>
                 Transfer
               </button>
             )}

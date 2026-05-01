@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Compass } from 'lucide-react';
 import { tokens } from '../../design-system/tokens';
 
 const NAV_ACTIVE_COLOR = '#2ADAA5';
@@ -13,11 +14,9 @@ const NAV_ITEMS = [
     strokeWidth: 1.5,
   },
   {
-    id: 'apply',
-    label: 'Apply',
-    viewBox: '0 0 20.5 20.5',
-    path: 'M0.75 19.75C0.75 16.75 2.6 14.39 5.83 13.75C8.25 13.27 10.75 11.75 11.75 10.75M9.74998 18.75C7.99404 18.7553 6.30023 18.1005 5.0045 16.9154C3.70876 15.7303 2.90575 14.1016 2.75471 12.3521C2.60368 10.6027 3.11567 8.86037 4.18913 7.47075C5.26259 6.08113 6.81911 5.14571 8.54998 4.85001C14.25 3.75001 15.75 3.23001 17.75 0.750008C18.75 2.75001 19.75 4.93001 19.75 8.75001C19.75 14.25 14.97 18.75 9.74998 18.75Z',
-    strokeWidth: 1.5,
+    id: 'explore',
+    label: 'Explore',
+    iconComponent: Compass,
   },
   {
     id: 'pay',
@@ -75,15 +74,20 @@ export default function BottomNav({ currentPage, onNavigate }) {
                 fontFamily: tokens.typography.fontFamily,
               }}
             >
-              <svg width="24" height="24" viewBox={item.viewBox} fill="none">
-                <path
-                  d={item.path}
-                  stroke="currentColor"
-                  strokeWidth={item.strokeWidth}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              {item.iconComponent
+                ? <item.iconComponent size={24} strokeWidth={1.5} />
+                : (
+                  <svg width="24" height="24" viewBox={item.viewBox} fill="none">
+                    <path
+                      d={item.path}
+                      stroke="currentColor"
+                      strokeWidth={item.strokeWidth}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )
+              }
               <span style={{
                 fontSize: '13px',
                 fontWeight: 500,

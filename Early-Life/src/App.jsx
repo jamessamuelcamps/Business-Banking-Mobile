@@ -11,9 +11,12 @@ import ManagePage from './components/pages/ManagePage';
 import AccountDetailPage from './components/pages/AccountDetailPage';
 import MemberDetailPage from './components/pages/MemberDetailPage';
 import CardDetailPage from './components/pages/CardDetailPage';
+import TransferPage from './components/pages/TransferPage';
+import ReviewPage from './components/pages/ReviewPage';
+import TransferSuccessFlow from './components/pages/TransferSuccessFlow';
 import SplashScreen from './components/onboarding/SplashScreen';
 
-const PAGE_ORDER = ['home', 'apply', 'pay', 'manage', 'card'];
+const PAGE_ORDER = ['home', 'explore', 'pay', 'manage', 'card'];
 
 function getDirection(from, to) {
   return PAGE_ORDER.indexOf(to) > PAGE_ORDER.indexOf(from) ? 1 : -1;
@@ -32,6 +35,19 @@ export default function App() {
   const [detail, setDetail] = useState(null); // null | 'account' | 'member' | 'card'
   const [savingsChoice, setSavingsChoice] = useState(null);
   const [timeAdvanced, setTimeAdvanced] = useState(false);
+  const [transferAmount, setTransferAmount] = useState('50000');
+  const [transferStarted, setTransferStarted] = useState(false);
+  const [transferComplete, setTransferComplete] = useState(false);
+  const [setupDismissed, setSetupDismissed] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const handleAdvanceTime = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setTimeAdvanced(true);
+      setIsTransitioning(false);
+    }, 400);
+  };
 
   const handleNavigate = (page) => {
     if (page === currentPage) return;
@@ -43,8 +59,8 @@ export default function App() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'home':    return <HomePage savingsChoice={savingsChoice} timeAdvanced={timeAdvanced} />;
-      case 'apply':   return <ApplyPage />;
+      case 'home':    return <HomePage savingsChoice={savingsChoice} timeAdvanced={timeAdvanced} transferStarted={transferStarted} transferComplete={transferComplete} setupDismissed={setupDismissed} onSetupDismiss={() => setSetupDismissed(true)} onTransfer={() => { setTransferStarted(true); setDetail('transfer'); }} />;
+      case 'explore':  return <ApplyPage />;
       case 'pay':     return <PaymentsPage />;
       case 'manage':  return <ManagePage onOpenDetail={setDetail} />;
       case 'card':    return <HelpPage />;
@@ -63,8 +79,8 @@ export default function App() {
             <motion.div
               key="app"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
+              animate={{ opacity: isTransitioning ? 0 : 1 }}
+              transition={{ duration: 0.35 }}
               style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}
             >
               {/* Page area */}
@@ -101,7 +117,7 @@ export default function App() {
               <AnimatePresence>
                 {detail && (
                   <motion.div
-                    key={detail}
+                    key={['review', 'success'].includes(detail) ? 'transfer' : detail}
                     initial={{ x: 393 }}
                     animate={{ x: 0 }}
                     exit={{ x: 393 }}
@@ -111,6 +127,52 @@ export default function App() {
                     {detail === 'account' && <AccountDetailPage onBack={() => setDetail(null)} />}
                     {detail === 'member'  && <MemberDetailPage  onBack={() => setDetail(null)} />}
                     {detail === 'card'    && <CardDetailPage    onBack={() => setDetail(null)} />}
+                    {(detail === 'transfer' || detail === 'review' || detail === 'success') && (
+                      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                        <TransferPage
+                          onBack={() => setDetail(null)}
+                          savingsChoice={savingsChoice}
+                          onNext={(amt) => { setTransferAmount(amt); setDetail('review'); }}
+                        />
+                        <AnimatePresence>
+                          {(detail === 'review' || detail === 'success') && (
+                            <motion.div
+                              key="review-layer"
+                              initial={{ x: 393 }}
+                              animate={{ x: 0 }}
+                              exit={{ x: 393 }}
+                              transition={{ type: 'spring', stiffness: 300, damping: 35, mass: 0.8 }}
+                              style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff' }}
+                            >
+                              <ReviewPage
+                                onBack={() => setDetail('transfer')}
+                                onConfirm={() => setDetail('success')}
+                                savingsChoice={savingsChoice}
+                                amount={transferAmount}
+                              />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                        <AnimatePresence>
+                          {detail === 'success' && (
+                            <motion.div
+                              key="success-layer"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column' }}
+                            >
+                              <TransferSuccessFlow
+                                onDone={() => { setDetail(null); setTransferComplete(true); }}
+                                savingsChoice={savingsChoice}
+                                amount={transferAmount}
+                              />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -120,9 +182,10 @@ export default function App() {
       </IPhoneShell>
 
       {/* Time control — outside the phone shell */}
-      {stage === 'app' && !timeAdvanced && (
+      {stage === 'app' && (
         <button
-          onClick={() => setTimeAdvanced(true)}
+          onClick={handleAdvanceTime}
+          disabled={timeAdvanced}
           style={{
             padding: '10px 18px',
             borderRadius: 12,
@@ -136,6 +199,7 @@ export default function App() {
             cursor: 'pointer',
             whiteSpace: 'nowrap',
             letterSpacing: '0.01em',
+            visibility: timeAdvanced ? 'hidden' : 'visible',
           }}
         >
           + 7 days
